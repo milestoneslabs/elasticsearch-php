@@ -174,3 +174,8 @@ Thanks in advance for your contribution! :heart:
 ## License 📗
 
 [MIT](LICENSE) © [Elastic](https://www.elastic.co/)
+
+## Fork updates
+
++ Removed response product check so it can be used with AWS OpenSearch
++ Request Content-Type header is set by default `application/json`
