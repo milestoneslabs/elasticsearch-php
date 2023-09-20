@@ -19,7 +19,6 @@ use Elastic\Elasticsearch\Exception\ArrayAccessException;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastic\Elasticsearch\Traits\MessageResponseTrait;
-use Elastic\Elasticsearch\Traits\ProductCheckTrait;
 use Elastic\Transport\Exception\UnknownContentTypeException;
 use Elastic\Transport\Serializer\CsvSerializer;
 use Elastic\Transport\Serializer\JsonSerializer;
@@ -35,7 +34,6 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
     const HEADER_CHECK = 'X-Elastic-Product';
     const PRODUCT_NAME = 'Elasticsearch';
 
-    use ProductCheckTrait;
     use MessageResponseTrait;
 
     protected array $asArray;
@@ -58,7 +56,6 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
      */
     public function setResponse(ResponseInterface $response, bool $throwException = true): void
     {
-        $this->productCheck($response);
         $this->response = $response;
         $status = $response->getStatusCode();
         if ($throwException && $status > 399 && $status < 500) {
@@ -88,7 +85,7 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
      * Converts the body content to array, if possible.
      * Otherwise, it throws an UnknownContentTypeException
      * if Content-Type is not specified or unknown.
-     * 
+     *
      * @throws UnknownContentTypeException
      */
     public function asArray(): array
@@ -124,7 +121,7 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
      * Converts the body content to object, if possible.
      * Otherwise, it throws an UnknownContentTypeException
      * if Content-Type is not specified or unknown.
-     * 
+     *
      * @throws UnknownContentTypeException
      */
     public function asObject(): object
@@ -174,7 +171,7 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
 
     /**
      * Access the body content as object properties
-     * 
+     *
      * @see https://www.php.net/manual/en/language.oop5.overloading.php#object.get
      */
     public function __get($name)
@@ -184,17 +181,17 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
 
     /**
      * ArrayAccess interface
-     * 
+     *
      * @see https://www.php.net/manual/en/class.arrayaccess.php
      */
     public function offsetExists($offset): bool
     {
         return isset($this->asArray()[$offset]);
     }
- 
+
     /**
      * ArrayAccess interface
-     * 
+     *
      * @see https://www.php.net/manual/en/class.arrayaccess.php
      */
     #[\ReturnTypeWillChange]
@@ -205,7 +202,7 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
 
     /**
      * ArrayAccess interface
-     * 
+     *
      * @see https://www.php.net/manual/en/class.arrayaccess.php
      */
     public function offsetSet($offset, $value): void
@@ -215,7 +212,7 @@ class Elasticsearch implements ElasticsearchInterface, ResponseInterface, ArrayA
 
     /**
      * ArrayAccess interface
-     * 
+     *
      * @see https://www.php.net/manual/en/class.arrayaccess.php
      */
     public function offsetUnset($offset): void
