@@ -155,35 +155,24 @@ trait EndpointTrait
     }
 
     /**
-     * Build the API compatibility headers
+     * Original: Build the API compatibility headers
      * transfrom Content-Type and Accept adding vnd.elasticsearch+ and compatible-with
+     *
+     * Fork update (Dorin Stanciu): Enforce application/json headers to enable compatibility
+     * with AWS OpenSearch
      *
      * @see https://github.com/elastic/elasticsearch-php/pull/1142
      */
     protected function buildCompatibilityHeaders(array $headers): array
     {
         if (isset($headers['Content-Type'])) {
-            if (
-                $headers['Content-Type'] !== 'application/json' &&
-                preg_match('/application\/([^,]+)$/', $headers['Content-Type'], $matches)
-            ) {
-                $headers['Content-Type'] = sprintf(Client::API_COMPATIBILITY_HEADER, 'application', $matches[1]);
-            }
+            $headers['Content-Type'] = 'application/json';
         }
+
         if (isset($headers['Accept'])) {
-            $values = explode(',', $headers['Accept']);
-            foreach ($values as &$value) {
-                if (preg_match('/(application|text)\/([^,]+)/', $value, $matches)) {
-                    $value = sprintf(Client::API_COMPATIBILITY_HEADER, $matches[1], $matches[2]);
-                }
-            }
-
-            if (!in_array('application/json', $values)) {
-                $values[] = 'application/json';
-            }
-
-            $headers['Accept'] = implode(',', $values);
+            $headers['Accept'] = 'application/json';
         }
+
         return $headers;
     }
 
