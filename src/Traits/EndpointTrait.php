@@ -177,6 +177,11 @@ trait EndpointTrait
                     $value = sprintf(Client::API_COMPATIBILITY_HEADER, $matches[1], $matches[2]);
                 }
             }
+
+            if (!in_array('application/json', $values)) {
+                $values[] = 'application/json';
+            }
+
             $headers['Accept'] = implode(',', $values);
         }
         return $headers;
